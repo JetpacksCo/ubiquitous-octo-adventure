@@ -16,7 +16,11 @@ export class TodoEntrySteps {
     return this.todoTitles.filter({ hasText: title });
   }
 
-  /** Opens the app and waits for the new-todo input. */
+  private async startEditing(title: string) {
+    await this.todoTitle(title).dblclick();
+    return this.page.getByRole('textbox', { name: 'Edit' });
+  }
+
   @step('Open the todo app')
   public async open() {
     await this.page.goto('./');
@@ -43,8 +47,7 @@ export class TodoEntrySteps {
 
   @step()
   public async editTodo({ from, to }: { from: string; to: string }) {
-    await this.todoTitle(from).dblclick();
-    const editBox = this.page.getByRole('textbox', { name: 'Edit' });
+    const editBox = await this.startEditing(from);
     await editBox.fill(to);
     await editBox.press('Enter');
     await expect(this.todoTitle(to)).toBeVisible();
@@ -53,8 +56,7 @@ export class TodoEntrySteps {
 
   @step('Start editing a todo and discard the changes')
   public async cancelEdit({ title, draft }: { title: string; draft: string }) {
-    await this.todoTitle(title).dblclick();
-    const editBox = this.page.getByRole('textbox', { name: 'Edit' });
+    const editBox = await this.startEditing(title);
     await editBox.fill(draft);
     await editBox.press('Escape');
     await expect(this.todoTitle(title)).toBeVisible();

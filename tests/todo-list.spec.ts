@@ -12,7 +12,7 @@ test.describe('Todo list', () => {
   });
 
   test('mark a todo as complete', async ({ page }) => {
-    const firstTodo = page.getByTestId('todo-item').nth(0);
+    const firstTodo = page.getByTestId('todo-item').filter({ hasText: TODO_ITEMS[0] });
     await firstTodo.getByRole('checkbox', { name: 'Toggle Todo' }).check();
 
     await expect(firstTodo.getByRole('checkbox', { name: 'Toggle Todo' })).toBeChecked();
@@ -20,11 +20,11 @@ test.describe('Todo list', () => {
   });
 
   test('delete a todo', async ({ page }) => {
-    const secondTodo = page.getByTestId('todo-item').nth(1);
+    const secondTodo = page.getByTestId('todo-item').filter({ hasText: TODO_ITEMS[1] });
     await secondTodo.hover();
     await secondTodo.getByRole('button', { name: 'Delete' }).click();
 
-    await expect(page.getByTestId('todo-title').filter({ hasText: TODO_ITEMS[1] })).toHaveCount(0);
+    await expect(secondTodo).toHaveCount(0);
     await expect(page.getByTestId('todo-item')).toHaveCount(2);
   });
 });

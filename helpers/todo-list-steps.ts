@@ -38,9 +38,10 @@ export class TodoListSteps {
 
   @step((args) => `Delete todo: ${args[0].title}`)
   public async deleteTodo({ title }: { title: string }) {
-    await this.todoItem(title).hover();
-    await this.todoItem(title).getByRole('button', { name: 'Delete' }).click();
-    await expect(this.todoItem(title)).toHaveCount(0);
+    const item = this.todoItem(title);
+    await item.hover();
+    await item.getByRole('button', { name: 'Delete' }).click();
+    await expect(item).toHaveCount(0);
   }
 
   @step()

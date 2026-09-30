@@ -5,7 +5,7 @@ function humanizeClassName(name: string): string {
 }
 
 function sentenceCase(name: string): string {
-  const words = name.replace(/([a-z])([A-Z])/g, '$1 $2').toLowerCase();
+  const words = humanizeClassName(name).toLowerCase();
   return words.charAt(0).toUpperCase() + words.slice(1);
 }
 
